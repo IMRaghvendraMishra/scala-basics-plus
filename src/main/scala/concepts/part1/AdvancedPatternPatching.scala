@@ -62,4 +62,60 @@ object AdvancedPatternPatching extends App {
   }
   println(matchProperty)
 
+  // Infix paterns -> ::
+  // Infix pattern make sense when we have 2 inputs only
+  case class Or[A, B](a: A, b: B) // In Scala it is called Either
+  val either = Or(2, "Two")
+  val humanDescription = either match {
+    // case Or(num, str) => s"$num is written as $str"
+    case num Or str => s"$num is written as $str" // same as above
+  }
+  println(humanDescription)
+
+  // decomposing sequences
+  val vararg = numbers match {
+    case List(1, _*) => "starting with 1"
+  }
+
+  abstract class MyList[+A] {
+    def head: A = ???
+    def tail: MyList[A] = ???
+  }
+  case object MyEmptyList extends MyList[Nothing]
+  case class MyNonEmptyList[+A](override val head: A, override val tail: MyList[A]) extends MyList[A]
+
+  object MyList {
+    def unapplySeq[A](list: MyList[A]): Option[Seq[A]] =
+      if (list == MyEmptyList) Some(Seq.empty)
+      else unapplySeq(list.tail).map(list.head +: _)
+  }
+
+  val myList: MyList[Int] = MyNonEmptyList(1, MyNonEmptyList(2, MyNonEmptyList(3, MyNonEmptyList(4, MyNonEmptyList(5, MyEmptyList)))))
+  val decomposed = myList match {
+    case MyList(1, 2, 3, _*) => s"Starting with 1, 2, 3"
+    case _ => s"Default myList"
+  }
+  println(decomposed)
+
+  // The return types of unapply and unapplySeq is not necessarily be an Option
+
+  // custom return type for unapply
+  // isEmpty: Boolean, get: Something
+  abstract class Wrapper[T] {
+    def isEmpty: Boolean
+    def get: T
+  }
+
+  object PersonWrapper {
+    def unapply(person: Person): Wrapper[String] = new Wrapper[String] {
+      def isEmpty: Boolean = false
+      def get: String = person.name
+    }
+  }
+
+  println(mohit match {
+    case PersonWrapper(n) => s"This person's name is $n"
+    case _ => s"Default person"
+  })
+
 }
