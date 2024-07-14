@@ -1,4 +1,4 @@
-package concepts.part1
+package concepts.part1_advanced_scala
 
 object AdvancedPatternPatching extends App {
 
