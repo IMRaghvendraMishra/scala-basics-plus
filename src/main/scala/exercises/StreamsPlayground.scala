@@ -2,11 +2,6 @@ package exercises
 
 import scala.annotation.tailrec
 
-
-/**
- * Created by Daniel.
- */
-
 abstract class MyStream[+A] {
   def isEmpty: Boolean
   def head: A
