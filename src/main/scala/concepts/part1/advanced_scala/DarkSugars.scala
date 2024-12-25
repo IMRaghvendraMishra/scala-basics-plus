@@ -2,6 +2,43 @@ package concepts.part1.advanced_scala
 
 import scala.util.Try
 
+/**
+ * This Scala object demonstrates **dark syntax sugars**, a set of syntactic features 
+ * that make Scala more expressive and concise. These features, while powerful, may 
+ * seem complex to beginners. Below is a breakdown of the key topics covered:
+ *
+ * 1. **Syntax Sugar #1: Single-Argument Methods**
+ *    - Allows methods with one parameter to be invoked using curly braces `{}` or colons `:`.
+ *    - Example: `Try { ... }` for exception handling.
+ *
+ * 2. **Syntax Sugar #2: Single Abstract Methods (SAM)**
+ *    - Enables defining instances of traits with one abstract method using lambdas.
+ *    - Examples include concise implementations of `Runnable` and custom traits.
+ *
+ * 3. **Syntax Sugar #3: Associative Methods**
+ *    - Methods ending with a colon `:` are right-associative, affecting their evaluation order.
+ *    - Demonstrated with `::` for list prepending and custom operators like `-->:`.
+ *
+ * 4. **Syntax Sugar #4: Multi-Word Method Names**
+ *    - Allows defining and invoking methods with quoted names for readability.
+ *    - Example: `lilly `and then said` "Scala is so sweet!"`.
+ *
+ * 5. **Syntax Sugar #5: Infix Types**
+ *    - Enables using types in an infix notation, making type declarations more natural.
+ *    - Example: `Int --> String` instead of `-->[Int, String]`.
+ *
+ * 6. **Syntax Sugar #6: `update` Method**
+ *    - Similar to `apply`, `update` enables array or collection elements to be updated
+ *      using the syntax `anArray(index) = value`.
+ *
+ * 7. **Syntax Sugar #7: Setters for Mutable Containers**
+ *    - Provides a concise syntax for setting values in mutable containers using 
+ *      `member_=` methods, e.g., `aMutableContainer.member = value`.
+ *
+ * This file is designed to help developers explore Scala's expressive syntax,
+ * illustrating how these sugars simplify common coding patterns and make the
+ * language more elegant. Perfect for understanding idiomatic Scala programming!
+ */
 object DarkSugars extends App {
 
   // Syntax Sugar #1: method with single param

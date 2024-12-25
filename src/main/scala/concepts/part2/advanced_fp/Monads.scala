@@ -1,7 +1,76 @@
 package concepts.part2.advanced_fp
 
 /**
- * Created by Daniel.
+ * **Monads in Scala**
+ *
+ * This object explores the concept of monads, their implementation, and their significance in functional programming.
+ *
+ * ## Key Concepts:
+ *
+ * ### 1. **Monad Definition**:
+ * A Monad is an abstraction that represents computations defined as a sequence of steps.
+ * - Requires two primary operations:
+ *   1. **unit** (or `apply`): Wraps a value into the monad context.
+ *      2. **flatMap**: Chains operations while preserving the monad context.
+ *
+ * ### 2. **Custom Monad: `Attempt`**:
+ * - Models computations that may fail (similar to `Try`).
+ * - Encapsulates successful and failed computations:
+ * trait Attempt[+A] {
+ * def flatMap[B](f: A => Attempt[B]): Attempt[B]
+ * }
+ * - Concrete implementations:
+ *   - `Success`: Represents successful computations.
+ *   - `Fail`: Represents failed computations.
+ *     - Example usage:
+ *       val attempt = Attempt {
+ *       throw new RuntimeException("My own monad, yes!")
+ *       }
+ *
+ * ### 3. **Monad Laws**:
+ * Monads must satisfy the following properties:
+ * - **Left Identity**:
+ * unit.flatMap(f) == f(x)
+ * Attempt(x).flatMap(f) == f(x)
+ * - **Right Identity**:
+ * attempt.flatMap(unit) == attempt
+ * - **Associativity**:
+ * attempt.flatMap(f).flatMap(g) == attempt.flatMap(x => f(x).flatMap(g))
+ *
+ * ### 4. **Exercise: `Lazy[T]` Monad**:
+ * - Encapsulates a computation that will only be executed when accessed.
+ * - Combines lazy evaluation with monadic chaining:
+ * class Lazy[+A](value: => A) {
+ * private lazy val internalValue = value
+ * def use: A = internalValue
+ * def flatMap[B](f: (=> A) => Lazy[B]): Lazy[B] = f(internalValue)
+ * }
+ * object Lazy {
+ * def apply[A](value: => A): Lazy[A] = new Lazy(value) // unit
+ * }
+ * - Example:
+ * val lazyInstance = Lazy {
+ * println("Today I don't feel like doing anything")
+ * 42
+ * }
+ * val flatMappedInstance = lazyInstance.flatMap(x => Lazy {
+ * 10 * x
+ * })
+ * flatMappedInstance.use
+ *
+ * ### 5. **Monadic Operations: `map` and `flatten`**:
+ * - `map` transforms the values in a monad:
+ * def map[B](f: T => B): Monad[B] = flatMap(x => unit(f(x)))
+ * - `flatten` collapses nested monads:
+ * def flatten[T](m: Monad[Monad[T]]): Monad[T] = m.flatMap(x => x)
+ * - Example with `List`:
+ * List(1,2,3).map(_ * 2) == List(1,2,3).flatMap(x => List(x * 2))
+ * List(List(1, 2), List(3, 4)).flatten == List(1,2,3,4)
+ *
+ * ## Practical Applications:
+ * - **Error Handling**: Using monads like `Try` or `Attempt` to manage exceptions gracefully.
+ * - **Lazy Computations**: Leveraging `Lazy` to optimize performance and avoid unnecessary computations.
+ * - **Chaining Operations**: Seamlessly composing transformations while abstracting the underlying context.
  */
 object Monads extends App {
 
@@ -12,18 +81,14 @@ object Monads extends App {
   }
   object Attempt {
     def apply[A](a: => A): Attempt[A] =
-      try {
-        Success(a)
-      } catch {
+      try Success(a) catch {
         case e: Throwable => Fail(e)
       }
   }
 
   case class Success[+A](value: A) extends Attempt[A] {
     def flatMap[B](f: A => Attempt[B]): Attempt[B] =
-      try {
-        f(value)
-      } catch {
+      try f(value) catch {
         case e: Throwable => Fail(e)
       }
   }
@@ -92,7 +157,7 @@ object Monads extends App {
     def flatMap[B](f: (=> A) => Lazy[B]): Lazy[B] = f(internalValue)
   }
   object Lazy {
-    def apply[A](value: => A): Lazy[A] = new Lazy(value) // unit
+    def apply[A](value: => A) = new Lazy(value) // unit
   }
 
   val lazyInstance = Lazy {
@@ -124,7 +189,7 @@ object Monads extends App {
     Lazy(v).flatMap(x => f(x).flatMap(g)) = f(v).flatMap(g)
    */
 
-  def flatten[T](lz: Lazy[Lazy[T]]): Lazy[T] = lz.flatMap(x => x)
+  def flatten[T](lz: Lazy[Lazy[T]]) = lz.flatMap(x => x)
   // 2: map and flatten in terms  of flatMap
   /*
     Monad[T] { // List

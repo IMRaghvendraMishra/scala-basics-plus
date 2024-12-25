@@ -1,8 +1,78 @@
 package concepts.part2.advanced_fp
 
 /**
- * Created by Daniel.
- */
+  * ** Lazy Evaluation in Scala **
+  *
+  * This object demonstrates the powerful concept of lazy evaluation, highlighting its utility
+  * in optimizing performance, reducing unnecessary computations, and enabling infinite data structures.
+  *
+  * ## Key Concepts:
+  *
+    * ### 1. ** Lazy Val **:
+ *    -Delays the evaluation of a value until it 's accessed for the first time.
+    * - Example:
+        lazy val x: Int = {
+          * println ("hello")
+            * 42
+          *
+        }
+          * println(x) // Prints "hello" and "42"
+          * println(x) // Prints only "42"
+* - Ensures side effects happen only once, even if accessed multiple times.
+  *
+  * ### 2. ** Lazy Evaluation with Conditions **:
+  * - Used in conjunction with logical operators to minimize computation:
+*
+    lazy val lazyCondition = sideEffectCondition
+     println(if (simpleCondition && lazyCondition) "yes" else "no")
+* - The second condition(`lazyCondition`) is not evaluated
+if the first condition is `false`.
+  *
+  * ### 3. ** Lazy Evaluation with Call - by - Name Parameters **:
+  * -Call - by - name(`=>`) parameters are evaluated lazily each time they are accessed .
+* - Combining call -by - name with `lazy` results in ** call - by - need ** , where the parameter
+ * is evaluated at most once :
+*
+def byNameMethod(n: => Int): Int = {
+  *
+  lazy val t = n // evaluated once
+    * t + t + t + 1
+  *
+}
+  * println(byNameMethod(retrieveMagicValue))
+  *
+  * ### 4. ** Lazy Filters with `withFilter` **:
+  * - Filters applied lazily under the hood :
+* val numbers = List(1, 25, 40, 5, 23)
+*
+val lt30lazy = numbers.withFilter(lessThan30) // lazy evaluation
+*
+val gt20lazy = lt30lazy.withFilter(greaterThan20)
+  * gt20lazy.foreach(println) // elements are processed one at a time
+* - Used implicitly in ** for - comprehensions ** for efficiency.
+  *
+  * ### 5. ** Exercise: Lazy Streams **:
+  * - Implementing an infinite, lazily evaluated stream:
+  * - A `MyStream` can represent an infinite series of values, computed only as needed .
+* - Methods include :
+  * - `map`, `flatMap`, and `filter` for transformations.
+  * - `take` to extract a finite subset of elements .
+* - Example:
+*
+val naturals = MyStream.from(1)(x => x + 1)
+  * naturals.take(100).foreach(println) // first 100 natural numbers
+  * naturals.map(_ * 2) // all even numbers
+*
+  * ## Benefits :
+  * - Reduces computation overhead by evaluating values only when required.
+    * - Enables infinite data structures like streams .
+* - Avoids side effects unless necessary.
+  *
+  * ## To -Do:
+  * - Implement the `MyStream` class with all required methods: - `map`, `flatMap`, `filter`, `take`,
+ * and `takeAsList`.
+* - Provide the `MyStream.from` factory for creating streams with a generator function.
+  */
 object LazyEvaluation extends App {
 
   // lazy DELAYS the evaluation of values

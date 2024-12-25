@@ -1,7 +1,46 @@
 package concepts.part2.advanced_fp
 
 /**
- * Created by Daniel.
+ * This Scala object dives into **curried functions, partial function applications (PAF)**,
+ * and advanced function manipulations, offering a clear exploration of functional programming paradigms.
+ * It is a valuable resource for understanding key Scala concepts. Here's a breakdown:
+ *
+ * 1. **Curried Functions**:
+ *    - Functions returning other functions, enabling partial application.
+ *    - Example: `val add3 = superAdder(3)` creates a new function to add `3`.
+ *    - Demonstrates how curried methods (e.g., `curriedAdder`) differ from standard functions.
+ *
+ * 2. **ETA-Expansion**:
+ *    - Converts methods into functions to satisfy type requirements.
+ *    - Example: `val add4: Int => Int = curriedAdder(4)` lifts a method to a function.
+ *
+ * 3. **Partial Function Applications (PAF)**:
+ *    - Using underscores `_` to create partially applied functions.
+ *    - Example: `val add5 = curriedAdder(5) _` lifts the method into a function.
+ *
+ * 4. **Advanced Function Transformations**:
+ *    - Multiple ways to create functions like `add7` using methods and lambdas.
+ *    - Highlights Scala's flexibility with syntax like `.curried` and `_`.
+ *
+ * 5. **String Manipulations with Functions**:
+ *    - Example: Using placeholders (`_`) to partially apply a function:
+ *      - `val insertName = concatenator("Hello, I'm ", _: String, ", how are you?")`.
+ *
+ * 6. **Exercise: Number Formatting**:
+ *    - Implements a curried formatter function to process lists of numbers in various formats (`%4.2f`, etc.).
+ *    - Demonstrates lifting methods to functions for concise application over collections.
+ *
+ * 7. **Methods vs Functions**:
+ *    - Explains the distinction and shows how to convert between them using ETA-expansion and lambdas.
+ *
+ * 8. **By-Name Parameters vs 0-Lambda Parameters**:
+ *    - Demonstrates the difference:
+ *      - By-name (`=>`) evaluates the argument lazily.
+ *      - By-function (`() =>`) requires an explicit function.
+ *    - Explores various invocation scenarios, highlighting nuances.
+ *
+ * This file provides a practical approach to functional programming with Scala, emphasizing
+ * reusability, expressiveness, and flexibility in working with functions and methods.
  */
 object CurriesPAF extends App {
 

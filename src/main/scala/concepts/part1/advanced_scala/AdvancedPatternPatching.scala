@@ -1,5 +1,29 @@
 package concepts.part1.advanced_scala
 
+/**
+ * This Scala object demonstrates advanced concepts of **pattern matching**,
+ * which is a powerful feature for handling and decomposing data structures.
+ * The file covers several key aspects of pattern matching, including:
+ *
+ * 1. **Matching on Lists**: Demonstrates pattern matching on list structures.
+ * 2. **Custom Extractors**:
+ *    - Using `unapply` and `unapplySeq` methods to define custom pattern matching logic.
+ *    - Shows how to decompose custom classes and return specific data.
+ *      3. **Special Matching Techniques**:
+ *    - Matching with infix patterns.
+ *    - Decomposing sequences.
+ *      4. **Custom Return Types for Extractors**:
+ *    - Shows how to define extractors that use custom return types instead of `Option`.
+ *      5. **Exercises**: Includes examples like single-digit and double-digit matchers.
+ *
+ * Key Concepts:
+ * - **Extractors**: Classes or objects that define an `unapply` method to enable pattern matching.
+ * - **Infix Patterns**: Allows matching two inputs using an operator-like syntax (e.g., `a Or b`).
+ * - **Recursive Matching**: Decomposes recursive structures such as custom lists using `unapplySeq`.
+ *
+ * This file is designed for developers exploring intermediate to advanced Scala features,
+ * providing examples that highlight both practical use cases and nuanced techniques of pattern matching.
+ */
 object AdvancedPatternPatching extends App {
 
   val numbers = List(1)
