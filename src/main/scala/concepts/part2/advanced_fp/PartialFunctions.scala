@@ -8,122 +8,91 @@ package concepts.part2.advanced_fp
 
 object PartialFunctions extends App {
 
-  /**
-   * **Custom Exception**
-   * Used to demonstrate a function that is not applicable for certain inputs.
-   */
-  class FunctionNotApplicableException extends RuntimeException
+  val aFunction = (x: Int) => x + 1 // Function1[Int, Int] === Int => Int
 
-  /**
-   * **Regular Function**
-   * Takes an `Int` and returns `Int`. It works for all inputs.
-   */
-  val aFunction = (x: Int) => x + 1 // Function[Int, Int] === Int => Int
-
-  /**
-   * **Fussy Function**
-   * Only handles specific inputs and throws an exception for others.
-   */
-  val aFussyFunction = (x: Int) => {
+  val aFussyFunction = (x: Int) =>
     if (x == 1) 42
     else if (x == 2) 56
     else if (x == 5) 999
     else throw new FunctionNotApplicableException
-  }
 
-  /**
-   * **Using Pattern Matching**
-   * Rewriting the fussy function with pattern matching.
-   */
+  class FunctionNotApplicableException extends RuntimeException
+
   val aNicerFussyFunction = (x: Int) => x match {
     case 1 => 42
     case 2 => 56
     case 5 => 999
   }
+  //  {1,2,5} => Int
 
-  /**
-   * **Partial Function**
-   * A function only defined for certain inputs using `case`.
-   */
   val aPartialFunction: PartialFunction[Int, Int] = {
     case 1 => 42
     case 2 => 56
     case 5 => 999
-  }
+  } // partial function value
 
-  // Using the partial function
-  println(aPartialFunction(2)) // Output: 56
-  // println(aPartialFunction(12345)) // Would throw a MatchError
+  println(aPartialFunction(2))
+  //  println(aPartialFunction(57273))
 
-  // Utilities of PartialFunction
-  println(aPartialFunction.isDefinedAt(2)) // Output: true
-  println(aPartialFunction.isDefinedAt(200)) // Output: false
+  // PF utilities
+  println(aPartialFunction.isDefinedAt(67))
 
-  /**
-   * **Lifting a Partial Function**
-   * Converts a PartialFunction into a total function: `Int => Option[Int]`.
-   */
-  val lifted = aPartialFunction.lift
-  println(lifted(2))   // Output: Some(56)
-  println(lifted(200)) // Output: None
+  // lift
+  val lifted = aPartialFunction.lift // Int => Option[Int]
+  println(lifted(2))
+  println(lifted(98))
 
-  /**
-   * **Chaining Partial Functions**
-   * Add a fallback case using `orElse`.
-   */
   val pfChain = aPartialFunction.orElse[Int, Int] {
-    case 200 => 67
+    case 45 => 67
   }
-  println(pfChain(2))   // Output: 56
-  println(pfChain(200)) // Output: 67
 
-  /**
-   * **Partial Function and Total Function**
-   * Partial functions extend total functions.
-   */
+  println(pfChain(2))
+  println(pfChain(45))
+
+  // PF extend normal functions
+
   val aTotalFunction: Int => Int = {
     case 1 => 99
   }
 
-  /**
-   * **Partial Function with Higher-Order Functions**
-   * Higher-order functions like `map` accept partial functions.
-   */
-  val myList = List(1, 2, 3).map {
-    case 1 => 100
-    case 2 => 200
-    case 3 => 300
+  // HOFs accept partial functions as well
+  val aMappedList = List(1,2,3).map {
+    case 1 => 42
+    case 2 => 78
+    case 3 => 1000
   }
-  println(myList) // Output: List(100, 200, 300)
+  println(aMappedList)
+
+  /*
+    Note: PF can only have ONE parameter type
+   */
 
   /**
-   * **Exercise 1: Manual Partial Function**
-   * Implementing a partial function manually.
+   * Exercises
+   *
+   * 1 - construct a PF instance yourself (anonymous class)
+   * 2 - dumb chatbot as a PF
    */
+
   val aManualFussyFunction = new PartialFunction[Int, Int] {
-    override def apply(v1: Int): Int = v1 match {
+    override def apply(x: Int): Int = x match {
       case 1 => 42
-      case 2 => 56
+      case 2 => 65
       case 5 => 999
     }
 
-    override def isDefinedAt(x: Int): Boolean = x == 1 || x == 2 || x == 5
+    override def isDefinedAt(x: Int): Boolean =
+      x == 1 || x == 2 || x == 5
   }
 
-  /**
-   * **Exercise 2: Dumb Chatbot**
-   * A simple chatbot implemented as a partial function.
-   */
   val chatbot: PartialFunction[String, String] = {
-    case "hello" => "Hi! How can I assist you?"
-    case "bye" => "Goodbye! Have a nice day!"
-    case "Scala" => "Scala is a powerful programming language."
+    case "hello" => "Hi, my name is HAL9000"
+    case "goodbye" => "Once you start talking to me, there is no return, human!"
+    case "call mom" => "Unable to find your phone without your credit card"
   }
 
-  // Using the chatbot
-  scala.io.Source.stdin.getLines().foreach { line =>
-    println(chatbot.applyOrElse(line, (_: String) => "I don't understand that."))
-  }
+  scala.io.Source.stdin.getLines().map(chatbot).foreach(println)
+
 }
 /**
  Key Concepts:

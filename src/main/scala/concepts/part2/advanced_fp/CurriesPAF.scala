@@ -127,7 +127,7 @@ object CurriesPAF extends App {
   byName(23)  // ok
   byName(method)  // ok
   byName(parenMethod())
-  //byName(parenMethod) // ok but beware ==> byName(parenMethod())
+  // byName(parenMethod) // Scala 2: ok but beware ==> byName(parenMethod()); Scala 3 forbids calling the method with no parens
   //  byName(() => 42) // not ok
   byName((() => 42)()) // ok
   //  byName(parenMethod _) // not ok

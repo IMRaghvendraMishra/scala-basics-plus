@@ -81,14 +81,18 @@ object Monads extends App {
   }
   object Attempt {
     def apply[A](a: => A): Attempt[A] =
-      try Success(a) catch {
+      try {
+        Success(a)
+      } catch {
         case e: Throwable => Fail(e)
       }
   }
 
   case class Success[+A](value: A) extends Attempt[A] {
     def flatMap[B](f: A => Attempt[B]): Attempt[B] =
-      try f(value) catch {
+      try {
+        f(value)
+      } catch {
         case e: Throwable => Fail(e)
       }
   }
@@ -157,7 +161,7 @@ object Monads extends App {
     def flatMap[B](f: (=> A) => Lazy[B]): Lazy[B] = f(internalValue)
   }
   object Lazy {
-    def apply[A](value: => A) = new Lazy(value) // unit
+    def apply[A](value: => A): Lazy[A] = new Lazy(value) // unit
   }
 
   val lazyInstance = Lazy {
@@ -189,7 +193,7 @@ object Monads extends App {
     Lazy(v).flatMap(x => f(x).flatMap(g)) = f(v).flatMap(g)
    */
 
-  def flatten[T](lz: Lazy[Lazy[T]]) = lz.flatMap(x => x)
+  def flatten[T](lz: Lazy[Lazy[T]]): Lazy[T] = lz.flatMap(x => x)
   // 2: map and flatten in terms  of flatMap
   /*
     Monad[T] { // List
