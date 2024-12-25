@@ -1,4 +1,4 @@
-package concepts.part2_advanced_functional_programming
+package concepts.part2.advanced_fp
 
 object PartialFunctions extends App {
 

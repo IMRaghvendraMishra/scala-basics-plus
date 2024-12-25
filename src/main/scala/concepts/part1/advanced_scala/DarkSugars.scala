@@ -1,4 +1,4 @@
-package concepts.part1_advanced_scala
+package concepts.part1.advanced_scala
 
 import scala.util.Try
 
