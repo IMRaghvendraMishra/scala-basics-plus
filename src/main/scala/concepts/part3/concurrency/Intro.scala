@@ -2,9 +2,6 @@ package concepts.part3.concurrency
 
 import java.util.concurrent.Executors
 
-/**
- * Created by Daniel.
- */
 object Intro extends App {
 
   /*
@@ -188,4 +185,3 @@ object Intro extends App {
 
 
 }
-
